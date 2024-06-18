@@ -1,0 +1,40 @@
+version: '3.3'
+
+services:
+  albaring-backend:
+    image: albaring/albaring-backend:latest
+    container_name: albaring-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - albaring
+
+  prometheus:
+    image: prom/prometheus
+    container_name: albaring-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - albaring
+    depends_on:
+      - albaring-backend
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: albaring-grafana
+    user: "$UID:$GID"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - albaring
+
+networks:
+  albaring:
+    driver: "bridge"
