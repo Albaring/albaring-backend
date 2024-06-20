@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: albaring-mysql-local
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: local!32
+      TZ: Asia/Seoul
+      MYSQL_DATABASE: albaring_local
+      MYSQL_USER: albaring_local
+      MYSQL_PASSWORD: local!32
+    command:
+      - --character-set-server=UTF8MB4
+      - --collation-server=UTF8MB4_UNICODE_CI
+      - --lower_case_table_names=1
+
+
+  redis:
+    image: redis:6.2
+    container_name: albaring-redis-local
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes
