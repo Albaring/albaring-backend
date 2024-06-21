@@ -5,8 +5,6 @@ import lombok.Getter;
 @Getter
 public enum ErrorType {
 
-    RSS_FEED_READ_FAILED(1000, "RSS Feed를 읽는데 실패했습니다."),
-
     REQUEST_EXCEPTION(9001, "http 요청 에러입니다."),
 
     INVALID_PATH(9002, "잘못된 경로입니다."),
