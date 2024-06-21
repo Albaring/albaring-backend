@@ -1,5 +1,11 @@
 package com.albaring.core.auth.application;
 
+import static com.albaring.core.auth.fixture.KakaoMemberFixture.어피치;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.albaring.common.util.ApplicationMockTest;
 import com.albaring.core.authentication.application.TokenService;
 import com.albaring.core.authentication.application.dto.KakaoProfileResponse;
@@ -19,10 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import static com.albaring.core.auth.fixture.KakaoMemberFixture.어피치;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @DisplayName("Toke 서비스 Mock 테스트")
 public class TokenServiceMockTest extends ApplicationMockTest {
@@ -48,14 +50,17 @@ public class TokenServiceMockTest extends ApplicationMockTest {
         @Test
         void 토큰_발급_성공() {
             // given
-            when(kakaoClient.requestKakaoProfile(어피치.인가_코드)).thenReturn(new KakaoProfileResponse(어피치.카카오_회원_번호));
+            when(kakaoClient.requestKakaoProfile(어피치.인가_코드)).thenReturn(
+                new KakaoProfileResponse(어피치.카카오_회원_번호));
 
-            Member 어피치_회원_정보 = new Member(어피치.카카오_회원_번호.toString(), MemberType.KAKAO, MemberStatus.ACTIVE);
+            Member 어피치_회원_정보 = new Member(어피치.카카오_회원_번호.toString(), MemberType.KAKAO,
+                MemberStatus.ACTIVE);
             ReflectionTestUtils.setField(어피치_회원_정보, "id", 1L);
             when(memberService.findOrCreateMemberByKakaoId(어피치.카카오_회원_번호))
-                    .thenReturn(어피치_회원_정보);
+                .thenReturn(어피치_회원_정보);
 
-            when(jwtTokenProvider.generateLoginToken(어피치_회원_정보.getId().toString())).thenReturn(new MemberTokens("Access Token", "Refresh Token"));
+            when(jwtTokenProvider.generateLoginToken(어피치_회원_정보.getId().toString())).thenReturn(
+                new MemberTokens("Access Token", "Refresh Token"));
 
             // when
             KakaoCodeRequest 카카오_인가_코드_요청_정보 = new KakaoCodeRequest(어피치.인가_코드);

@@ -9,5 +9,5 @@ public enum MemberStatus {
     ACTIVE,
     INACTIVE,
     SUSPENDED,
-    WITHDRAWN;
+    WITHDRAWN
 }

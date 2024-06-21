@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class ExpiredPeriodJwtException extends UnauthorizedException {
 
-  public ExpiredPeriodJwtException(ErrorType errorType) {
-    super(errorType);
-  }
+    public ExpiredPeriodJwtException(ErrorType errorType) {
+        super(errorType);
+    }
 }

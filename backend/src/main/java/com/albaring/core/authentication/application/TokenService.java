@@ -16,19 +16,20 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TokenService {
 
-  private final RefreshTokenRepository refreshTokenRepository;
-  private final MemberService memberService;
-  private final JwtTokenProvider jwtTokenProvider;
-  private final KakaoClient kakaoClient;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final KakaoClient kakaoClient;
 
-  public MemberTokens generateToken(KakaoCodeRequest request) {
-    KakaoProfileResponse kakaoProfileResponse = kakaoClient.requestKakaoProfile(request.getCode());
-    Member member = memberService.findOrCreateMemberByKakaoId(kakaoProfileResponse.getId());
+    public MemberTokens generateToken(KakaoCodeRequest request) {
+        KakaoProfileResponse kakaoProfileResponse = kakaoClient.requestKakaoProfile(
+            request.getCode());
+        Member member = memberService.findOrCreateMemberByKakaoId(kakaoProfileResponse.getId());
 
-    MemberTokens memberTokens = jwtTokenProvider.generateLoginToken(member.getId().toString());
-    RefreshToken savedRefreshToken = new RefreshToken(memberTokens.getRefreshToken(),
-        member.getId());
-    refreshTokenRepository.save(savedRefreshToken);
-    return memberTokens;
-  }
+        MemberTokens memberTokens = jwtTokenProvider.generateLoginToken(member.getId().toString());
+        RefreshToken savedRefreshToken = new RefreshToken(memberTokens.getRefreshToken(),
+            member.getId());
+        refreshTokenRepository.save(savedRefreshToken);
+        return memberTokens;
+    }
 }

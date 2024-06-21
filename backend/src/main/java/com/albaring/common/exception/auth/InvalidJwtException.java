@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class InvalidJwtException extends UnauthorizedException {
 
-  public InvalidJwtException(ErrorType errorType) {
-    super(errorType);
-  }
+    public InvalidJwtException(ErrorType errorType) {
+        super(errorType);
+    }
 }
