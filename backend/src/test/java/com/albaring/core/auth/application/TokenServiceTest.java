@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static com.albaring.core.auth.fixture.KakaoMemberFixture.라이언;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Toke 서비스 테스트")
+@DisplayName("Token 서비스 테스트")
 public class TokenServiceTest extends ApplicationTest {
 
     @Autowired
