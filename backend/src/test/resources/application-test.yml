@@ -20,9 +20,10 @@ spring:
     password: test!32
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  redis:
-    host: localhost
-    port: 6380
+  data:
+    redis:
+      host: localhost
+      port: 6380
 
 security:
   jwt:

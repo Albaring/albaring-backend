@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum MemberType {
+public enum  MemberType {
     NORMAL,
     KAKAO,
     NAVER
