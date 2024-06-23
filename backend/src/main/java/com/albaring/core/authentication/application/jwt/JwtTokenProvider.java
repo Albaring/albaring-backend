@@ -1,12 +1,11 @@
 package com.albaring.core.authentication.application.jwt;
 
-import static com.albaring.common.exception.common.ErrorType.EXPIRED_PERIOD_ACCESS_TOKEN;
-import static com.albaring.common.exception.common.ErrorType.EXPIRED_PERIOD_REFRESH_TOKEN;
-import static com.albaring.common.exception.common.ErrorType.INVALID_ACCESS_TOKEN;
-import static com.albaring.common.exception.common.ErrorType.INVALID_REFRESH_TOKEN;
+import static com.albaring.common.exception.common.ErrorCode.EXPIRED_PERIOD_ACCESS_TOKEN;
+import static com.albaring.common.exception.common.ErrorCode.EXPIRED_PERIOD_REFRESH_TOKEN;
+import static com.albaring.common.exception.common.ErrorCode.INVALID_ACCESS_TOKEN;
+import static com.albaring.common.exception.common.ErrorCode.INVALID_REFRESH_TOKEN;
 
-import com.albaring.common.exception.auth.ExpiredPeriodJwtException;
-import com.albaring.common.exception.auth.InvalidJwtException;
+import com.albaring.common.exception.UnauthorizedException;
 import com.albaring.core.authentication.domain.MemberTokens;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -56,9 +55,9 @@ public class JwtTokenProvider {
         try {
             parseToken(refreshToken);
         } catch (final ExpiredJwtException e) {
-            throw new ExpiredPeriodJwtException(EXPIRED_PERIOD_REFRESH_TOKEN);
+            throw new UnauthorizedException(EXPIRED_PERIOD_REFRESH_TOKEN);
         } catch (final JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtException(INVALID_REFRESH_TOKEN);
+            throw new UnauthorizedException(INVALID_REFRESH_TOKEN);
         }
     }
 
@@ -66,9 +65,9 @@ public class JwtTokenProvider {
         try {
             parseToken(accessToken);
         } catch (final ExpiredJwtException e) {
-            throw new ExpiredPeriodJwtException(EXPIRED_PERIOD_ACCESS_TOKEN);
+            throw new UnauthorizedException(EXPIRED_PERIOD_ACCESS_TOKEN);
         } catch (final JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtException(INVALID_ACCESS_TOKEN);
+            throw new UnauthorizedException(INVALID_ACCESS_TOKEN);
         }
     }
 
@@ -82,7 +81,7 @@ public class JwtTokenProvider {
         validateRefreshToken(refreshToken);
         try {
             validateAccessToken(accessToken);
-        } catch (final ExpiredPeriodJwtException e) {
+        } catch (final UnauthorizedException e) {
             return true;
         }
         return false;

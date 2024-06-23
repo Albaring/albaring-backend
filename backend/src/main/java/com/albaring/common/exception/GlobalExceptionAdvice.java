@@ -1,17 +1,15 @@
-package com.albaring.common.exception.common;
+package com.albaring.common.exception;
 
-import static com.albaring.common.exception.common.ErrorType.UNHANDLED_EXCEPTION;
+import static com.albaring.common.exception.common.ErrorCode.INVALID_REQUEST_BODY;
+import static com.albaring.common.exception.common.ErrorCode.UNHANDLED_EXCEPTION;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
-import com.albaring.common.exception.auth.UnauthorizedException;
-import com.albaring.common.exception.badRequest.BadRequestException;
+import com.albaring.common.exception.common.ErrorCode;
 import com.albaring.common.exception.common.dto.ErrorResponse;
 import com.albaring.common.exception.common.dto.ValidationErrorResponse;
-import com.albaring.common.exception.forbidden.ForbiddenException;
-import com.albaring.common.exception.server.InternalServerErrorException;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 
 @Slf4j
@@ -30,29 +27,26 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> badRequestExceptionHandler(final BadRequestException e) {
         log.warn("Bad Request Exception", e);
-        return ResponseEntity.badRequest().body(new ErrorResponse(e.getCode(), e.getMessage()));
+
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> unauthorizedExceptionHandler(
         final UnauthorizedException e) {
         log.warn("Unauthorized Exception", e);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body(new ErrorResponse(e.getCode(), e.getMessage()));
+
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorResponse> forbiddenExceptionHandler(final ForbiddenException e) {
         log.warn("Forbidden Exception", e);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-            .body(new ErrorResponse(e.getCode(), e.getMessage()));
-    }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
-        log.error("NoHandlerFoundException", e);
-        return ResponseEntity.badRequest().body(new ErrorResponse(ErrorType.INVALID_PATH.getCode(),
-            ErrorType.INVALID_PATH.getMessage()));
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -63,16 +57,17 @@ public class GlobalExceptionAdvice {
             errors.put(((FieldError) error).getField(), error.getDefaultMessage());
         });
         return ResponseEntity.unprocessableEntity()
-            .body(new ValidationErrorResponse(ErrorType.UNPROCESSABLE_ENTITY.getCode(), errors));
+            .body(new ValidationErrorResponse(ErrorCode.UNPROCESSABLE_ENTITY.getCode(), errors));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
         HttpMessageNotReadableException e) {
         log.warn("HttpMessageNotReadableException", e);
-        return ResponseEntity.badRequest()
-            .body(new ErrorResponse(ErrorType.INVALID_REQUEST_BODY.getCode(),
-                ErrorType.INVALID_REQUEST_BODY.getMessage()));
+
+
+        ErrorResponse errorResponse = ErrorResponse.of(INVALID_REQUEST_BODY);
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
     @ExceptionHandler(InternalServerErrorException.class) // TODO: 슬랙 알람 기능 추가
@@ -80,16 +75,17 @@ public class GlobalExceptionAdvice {
         final InternalServerErrorException e) {
         log.warn("InternalServerError Exception", e);
 
-        return ResponseEntity.internalServerError()
-            .body(new ErrorResponse(e.getCode(), e.getMessage()));
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
     @ExceptionHandler(Exception.class) // TODO: 슬랙 알람 기능 추가
     public ResponseEntity<ErrorResponse> unHandledExceptionHandler(final Exception e) {
         log.error("Not Expected Exception is Occurred", e);
-        return ResponseEntity.internalServerError()
-            .body(
-                new ErrorResponse(UNHANDLED_EXCEPTION.getCode(), UNHANDLED_EXCEPTION.getMessage()));
+
+        final ErrorResponse response = ErrorResponse.of(UNHANDLED_EXCEPTION);
+
+        return new ResponseEntity<>(response, INTERNAL_SERVER_ERROR);
     }
 
 }
