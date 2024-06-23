@@ -25,14 +25,14 @@ public class Member {
     private String socialId;
 
     @Enumerated(EnumType.STRING)
-    private MemberType memberType;
+    private OAuthProviderType oAuthProviderType;
 
     @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus;
 
-    public Member(String socialId, MemberType memberType, MemberStatus memberStatus) {
+    public Member(String socialId, OAuthProviderType oAuthProviderType, MemberStatus memberStatus) {
         this.socialId = socialId;
-        this.memberType = memberType;
+        this.oAuthProviderType = oAuthProviderType;
         this.memberStatus = memberStatus;
     }
 }

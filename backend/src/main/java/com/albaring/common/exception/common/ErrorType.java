@@ -17,6 +17,7 @@ public enum ErrorType {
 
     NOT_FOUND_DATA(9006, "요청한 데이터를 찾을 수 없습니다."),
 
+    NOT_SUPPORTED_OAUTH_SERVICE(9100, "해당 OAuth를 제공하지 않습니다."),
     INVALID_REFRESH_TOKEN(9101, "올바르지 않은 형식의 RefreshToken입니다."),
     INVALID_ACCESS_TOKEN(9102, "올바르지 않은 형식의 AccessToken입니다."),
 
