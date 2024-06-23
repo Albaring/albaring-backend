@@ -6,7 +6,7 @@ import static com.albaring.core.auth.step.AuthSteps.카카오_로그인_요청;
 import static com.albaring.core.auth.step.AuthSteps.토큰_확인;
 
 import com.albaring.common.util.AcceptanceTest;
-import com.albaring.core.authentication.presentation.dto.KakaoCodeRequest;
+import com.albaring.core.authentication.presentation.dto.OauthProviderCodeRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
             @Test
             void 가입되지_않은_회원에게_토큰_발급() {
                 // given
-                var 로그인_요청_정보 = new KakaoCodeRequest(라이언.인가_코드);
+                var 로그인_요청_정보 = new OauthProviderCodeRequest(라이언.인가_코드);
 
                 // when
                 var 카카오_로그인_요청_응답 = 카카오_로그인_요청(로그인_요청_정보);
