@@ -1,9 +1,12 @@
 package com.albaring.core.authentication.application.kakao;
 
 import com.albaring.common.util.WebClientUtil;
+import com.albaring.core.authentication.application.OAuthProvider;
+import com.albaring.core.authentication.application.OauthUserProfile;
 import com.albaring.core.authentication.application.dto.KakaoAccessTokenRequest;
 import com.albaring.core.authentication.application.dto.KakaoAccessTokenResponse;
 import com.albaring.core.authentication.application.dto.KakaoProfileResponse;
+import com.albaring.core.member.domain.OAuthProviderType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -15,13 +18,26 @@ import org.springframework.util.MultiValueMap;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class KakaoClient {
+public class KakaoOauthProvider implements OAuthProvider {
+
+    private static final OAuthProviderType PROVIDER_TYPE = OAuthProviderType.KAKAO;
 
     private final WebClientUtil webClientUtil;
     private final KakaoAuthProperties kakaoAuthProperties;
     private final KakaoUserProperties kakaoUserProperties;
 
-    public KakaoProfileResponse requestKakaoProfile(String code) {
+    @Override
+    public OAuthProviderType getOAuthProviderType() {
+        return PROVIDER_TYPE;
+    }
+
+    @Override
+    public boolean is(String providerType) {
+        return PROVIDER_TYPE.equals(OAuthProviderType.of(providerType));
+    }
+
+    @Override
+    public OauthUserProfile getUserProfile(String code) {
         String accessToken = requestKakaoToken(code);
         return requestKakaoUserInfo(accessToken);
     }
@@ -42,12 +58,13 @@ public class KakaoClient {
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
 
-        return webClientUtil
+        KakaoProfileResponse response = webClientUtil
             .get(kakaoUserProperties.getProfileUri(),
                 headers,
                 KakaoProfileResponse.class)
             .doOnError(ex -> log.error("Error requesting Kakao User Info: {}", ex.getMessage()))
             .block();
+        return KakaoProfileResponse.mergeOauthProviderName(response, PROVIDER_TYPE);
     }
 
     private KakaoAccessTokenRequest createKakaoAccessTokenRequest(String code) {

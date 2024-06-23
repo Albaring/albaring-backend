@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class KakaoCodeRequest {
+public class OauthProviderCodeRequest {
 
     @NotBlank
     private String code;
