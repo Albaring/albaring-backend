@@ -1,7 +1,8 @@
 package com.albaring.core.authentication.application;
 
-import com.albaring.common.exception.common.ErrorType;
-import com.albaring.core.authentication.exception.AuthenticationException;
+import com.albaring.common.exception.BadRequestException;
+import com.albaring.common.exception.UnauthorizedException;
+import com.albaring.common.exception.common.ErrorCode;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,6 @@ public class OauthProviders {
         return providers.stream()
             .filter(provider -> provider.is(providerName))
             .findFirst()
-            .orElseThrow(() -> new AuthenticationException(ErrorType.NOT_SUPPORTED_OAUTH_SERVICE));
+            .orElseThrow(() -> new BadRequestException(ErrorCode.NOT_SUPPORTED_OAUTH_SERVICE));
     }
 }

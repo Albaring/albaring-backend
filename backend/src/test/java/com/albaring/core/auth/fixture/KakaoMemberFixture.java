@@ -1,7 +1,7 @@
 package com.albaring.core.auth.fixture;
 
-import com.albaring.common.exception.badRequest.BadRequestException;
-import com.albaring.common.exception.common.ErrorType;
+import com.albaring.common.exception.BadRequestException;
+import com.albaring.common.exception.common.ErrorCode;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public enum KakaoMemberFixture {
         return Arrays.stream(values())
             .filter(memberFixture -> memberFixture.인가_코드.equals(인가_코드))
             .findFirst()
-            .orElseThrow(() -> new BadRequestException(ErrorType.NOT_FOUND_DATA))
+            .orElseThrow(() -> new BadRequestException(ErrorCode.NOT_FOUND_DATA))
             .get토큰();
     }
 
@@ -38,7 +38,7 @@ public enum KakaoMemberFixture {
         return Arrays.stream(values())
             .filter(memberFixture -> memberFixture.토큰.equals(토큰))
             .findFirst()
-            .orElseThrow(() -> new BadRequestException(ErrorType.NOT_FOUND_DATA))
+            .orElseThrow(() -> new BadRequestException(ErrorCode.NOT_FOUND_DATA))
             .get카카오_회원_번호();
     }
 

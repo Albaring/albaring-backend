@@ -1,8 +1,8 @@
 package com.albaring.core.authentication.application.jwt;
 
-import static com.albaring.common.exception.common.ErrorType.INVALID_ACCESS_TOKEN;
+import static com.albaring.common.exception.common.ErrorCode.INVALID_ACCESS_TOKEN;
 
-import com.albaring.common.exception.auth.InvalidJwtException;
+import com.albaring.common.exception.UnauthorizedException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,6 +14,6 @@ public class BearerAuthorizationExtractor {
         if (header != null && header.startsWith(BEARER_TYPE)) {
             return header.substring(BEARER_TYPE.length()).trim();
         }
-        throw new InvalidJwtException(INVALID_ACCESS_TOKEN);
+        throw new UnauthorizedException(INVALID_ACCESS_TOKEN);
     }
 }
