@@ -1,0 +1,50 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+        jdbc:
+          batch_size: 100
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/albaring_local?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: albaring_local
+    password: local!32
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+security:
+  jwt:
+    token:
+      secret-key: albaring-local-secret-key
+      access-token-expire-length: 3600000 # 1 hour for access token
+      refresh-token-expire-length: 1209600000 # 2 weeks for refresh token
+
+kakao:
+  auth:
+    token-uri: https://kauth.kakao.com/oauth/token
+    client-id: f7ef47fe00d9534eb077f71acd3c48e0
+    redirect-uri: http://localhost:8080/kakao/callback
+
+  user:
+    profile-uri: https://kapi.kakao.com/v2/user/me
+
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.type.descriptor.sql: trace
