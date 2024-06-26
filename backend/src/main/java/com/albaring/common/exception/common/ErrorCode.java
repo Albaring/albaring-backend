@@ -20,6 +20,7 @@ public enum ErrorCode {
     EXPIRED_PERIOD_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, 9104, "기한이 만료된 AccessToken입니다."),
 
     INVALID_REQUEST_BODY(HttpStatus.BAD_REQUEST, 9104, "올바르지 않은 요청 데이터입니다."),
+    NOT_FOUND_COOKIE(HttpStatus.BAD_REQUEST, 9105, "쿠키 정보를 찾을 수 없습니다."),
 
     UNHANDLED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, 9999, "예상치 못한 예외입니다.");
 

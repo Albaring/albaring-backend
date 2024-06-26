@@ -1,6 +1,7 @@
 package com.albaring.common.exception;
 
 import static com.albaring.common.exception.common.ErrorCode.INVALID_REQUEST_BODY;
+import static com.albaring.common.exception.common.ErrorCode.NOT_FOUND_COOKIE;
 import static com.albaring.common.exception.common.ErrorCode.UNHANDLED_EXCEPTION;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -67,6 +69,15 @@ public class GlobalExceptionAdvice {
 
 
         ErrorResponse errorResponse = ErrorResponse.of(INVALID_REQUEST_BODY);
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    }
+
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestCookieException(
+        MissingRequestCookieException e) {
+        log.warn("MissingRequestCookieException", e);
+
+        ErrorResponse errorResponse = ErrorResponse.of(NOT_FOUND_COOKIE);
         return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 

@@ -32,4 +32,8 @@ public class TokenService {
         refreshTokenRepository.save(savedRefreshToken);
         return memberTokens;
     }
+
+    public void removeRefreshToken(String refreshToken) {
+        refreshTokenRepository.deleteById(refreshToken);
+    }
 }
