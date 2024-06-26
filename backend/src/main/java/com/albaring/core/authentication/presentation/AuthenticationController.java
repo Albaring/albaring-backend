@@ -54,9 +54,10 @@ public class AuthenticationController implements BaseApiController {
         return ResponseEntity.ok(AccessTokenResponse.of(memberTokens.getAccessToken()));
     }
 
-    @Operation(summary = "로그아웃", description = "로그아웃")
+    @Operation(summary = "로그아웃", description = "로그아웃(Refresh Token 쿠키 필요)")
     @DeleteMapping("/api/logout")
-    public ResponseEntity<Void> logout(@CookieValue("refresh-token") final String refreshToken) {
+    public ResponseEntity<Void> logout(
+        @Parameter(hidden = true) @CookieValue("refresh-token") String refreshToken) {
         tokenService.removeRefreshToken(refreshToken);
         return ResponseEntity.noContent().build();
     }
