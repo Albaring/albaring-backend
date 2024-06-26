@@ -32,6 +32,26 @@ public class AuthSteps {
             .extract();
     }
 
+    public static void 로그아웃_요청(String 리프레시_토큰) {
+        given().log().all()
+            .cookie("refresh-token", 리프레시_토큰)
+            .when()
+            .delete("/api/logout")
+            .then().log().all()
+            .statusCode(HttpStatus.NO_CONTENT.value())
+            .extract();
+    }
+
+    public static void 실패하는_로그아웃_요청() {
+        given().log().all()
+            .when()
+            .delete("/api/logout")
+            .then().log().all()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .extract();
+    }
+
+
     public static void 토큰_확인(ExtractableResponse<Response> 카카오_로그인_요청_응답) {
         String 발급된_액세스_토큰 = 카카오_로그인_요청_응답.jsonPath().getString("accessToken");
         assertThat(발급된_액세스_토큰).isNotBlank();
