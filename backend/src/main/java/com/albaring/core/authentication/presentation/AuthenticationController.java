@@ -15,6 +15,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,5 +52,13 @@ public class AuthenticationController implements BaseApiController {
             .build();
         response.addHeader(SET_COOKIE, cookie.toString());
         return ResponseEntity.ok(AccessTokenResponse.of(memberTokens.getAccessToken()));
+    }
+
+    @Operation(summary = "로그아웃", description = "로그아웃(Refresh Token 쿠키 필요)")
+    @DeleteMapping("/api/logout")
+    public ResponseEntity<Void> logout(
+        @Parameter(hidden = true) @CookieValue("refresh-token") String refreshToken) {
+        tokenService.removeRefreshToken(refreshToken);
+        return ResponseEntity.noContent().build();
     }
 }
