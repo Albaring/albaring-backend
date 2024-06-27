@@ -44,6 +44,15 @@ kakao:
   user:
     profile-uri: https://kapi.kakao.com/v2/user/me
 
+naver:
+  auth:
+    token-uri: https://nid.naver.com/oauth2.0/token
+    client-id: rBw_6HMLLHEI75uUowpR
+    client-secret: GEKqxZ95dS
+    redirect-uri: http://localhost:8080/naver/callback
+
+  user:
+    profile-uri: https://openapi.naver.com/v1/nid/me
 
 logging:
   level:

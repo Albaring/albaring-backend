@@ -1,4 +1,4 @@
-package com.albaring.core.authentication.application.dto;
+package com.albaring.core.authentication.application.kakao.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.albaring.core.authentication.application.dto;
+package com.albaring.core.authentication.application.kakao.dto;
 
 import com.albaring.core.authentication.application.OauthUserProfile;
 import com.albaring.core.member.domain.OAuthProviderType;

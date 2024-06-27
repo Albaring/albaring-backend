@@ -1,4 +1,4 @@
-package com.albaring.core.authentication.application.dto;
+package com.albaring.core.authentication.application.naver.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class KakaoAccessTokenResponse {
+public class NaverAccessTokenResponse {
 
     @JsonProperty("token_type")
     public String tokenType;
+
     @JsonProperty("access_token")
     public String accessToken;
 }
