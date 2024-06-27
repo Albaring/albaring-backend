@@ -1,4 +1,4 @@
-package com.albaring.core.authentication.application.kakao;
+package com.albaring.core.authentication.application.naver;
 
 import com.albaring.common.util.WebClientUtil;
 import com.albaring.core.authentication.application.OAuthProvider;
@@ -6,6 +6,8 @@ import com.albaring.core.authentication.application.OauthUserProfile;
 import com.albaring.core.authentication.application.kakao.dto.KakaoAccessTokenRequest;
 import com.albaring.core.authentication.application.kakao.dto.KakaoAccessTokenResponse;
 import com.albaring.core.authentication.application.kakao.dto.KakaoProfileResponse;
+import com.albaring.core.authentication.application.naver.dto.NaverAccessTokenRequest;
+import com.albaring.core.authentication.application.naver.dto.NaverProfileResponse;
 import com.albaring.core.member.domain.OAuthProviderType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +20,13 @@ import org.springframework.util.MultiValueMap;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class KakaoOauthProvider implements OAuthProvider {
+public class NaverOauthProvider implements OAuthProvider {
 
-    private static final OAuthProviderType PROVIDER_TYPE = OAuthProviderType.KAKAO;
+    private static final OAuthProviderType PROVIDER_TYPE = OAuthProviderType.NAVER;
 
     private final WebClientUtil webClientUtil;
-    private final KakaoAuthProperties kakaoAuthProperties;
-    private final KakaoUserProperties kakaoUserProperties;
+    private final NaverAuthProperties naverAuthProperties;
+    private final NaverUserProperties naverUserProperties;
 
     @Override
     public OAuthProviderType getOAuthProviderType() {
@@ -38,50 +40,53 @@ public class KakaoOauthProvider implements OAuthProvider {
 
     @Override
     public OauthUserProfile getUserProfile(String code) {
-        String accessToken = requestKakaoToken(code);
-        return requestKakaoUserInfo(accessToken);
+        String accessToken = requestNaverToken(code);
+        return requestNaverUserInfo(accessToken);
     }
 
-    private String requestKakaoToken(String code) {
+    private String requestNaverToken(String code) {
         return webClientUtil
-            .post(kakaoAuthProperties.getTokenUri(),
-                toFormData(createKakaoAccessTokenRequest(code)),
+            .post(naverAuthProperties.getTokenUri(),
+                toFormData(createNaverAccessTokenRequest(code)),
                 MediaType.APPLICATION_FORM_URLENCODED,
                 KakaoAccessTokenResponse.class)
-            .doOnError(ex -> log.error("Error requesting Kakao token: {}", ex.getMessage()))
+            .doOnError(ex -> log.error("Error requesting Naver token: {}", ex.getMessage()))
             .block()
             .getAccessToken();
     }
 
-    private KakaoProfileResponse requestKakaoUserInfo(String accessToken) {
+    private NaverProfileResponse requestNaverUserInfo(String accessToken) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
 
-        KakaoProfileResponse response = webClientUtil
-            .get(kakaoUserProperties.getProfileUri(),
+        NaverProfileResponse response = webClientUtil
+            .get(naverUserProperties.getProfileUri(),
                 headers,
-                KakaoProfileResponse.class)
-            .doOnError(ex -> log.error("Error requesting Kakao User Info: {}", ex.getMessage()))
+                NaverProfileResponse.class)
+            .doOnError(ex -> log.error("Error requesting Naver User Info: {}", ex.getMessage()))
             .block();
-        return KakaoProfileResponse.mergeOauthProviderName(response, PROVIDER_TYPE);
+        return NaverProfileResponse.mergeOauthProviderName(response, PROVIDER_TYPE);
     }
 
-    private KakaoAccessTokenRequest createKakaoAccessTokenRequest(String code) {
-        return new KakaoAccessTokenRequest(
+    private NaverAccessTokenRequest createNaverAccessTokenRequest(String code) {
+        return new NaverAccessTokenRequest(
             "authorization_code",
             code,
-            kakaoAuthProperties.getClientId(),
-            kakaoAuthProperties.getRedirectUri()
+            naverAuthProperties.getClientId(),
+            naverAuthProperties.getClientSecret(),
+            naverAuthProperties.getRedirectUri(),
+            "STATE_STRING"
         );
     }
 
-    private MultiValueMap<String, String> toFormData(KakaoAccessTokenRequest request) {
+    private MultiValueMap<String, String> toFormData(NaverAccessTokenRequest request) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", request.getGrantType());
         formData.add("code", request.getCode());
         formData.add("client_id", request.getClientId());
+        formData.add("client_secret", request.getClientSecret());
         formData.add("redirect_uri", request.getRedirectUri());
+        formData.add("state", request.getState());
         return formData;
     }
 }
