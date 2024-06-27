@@ -14,6 +14,8 @@ public class KakaoAccessTokenRequest {
     private String code;
 
     private String clientId;
+    
+    private String clientSecret;
 
     private String redirectUri;
 

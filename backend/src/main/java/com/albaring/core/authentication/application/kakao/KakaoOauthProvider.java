@@ -72,6 +72,7 @@ public class KakaoOauthProvider implements OAuthProvider {
             "authorization_code",
             code,
             kakaoAuthProperties.getClientId(),
+            kakaoAuthProperties.getClientSecret(),
             kakaoAuthProperties.getRedirectUri()
         );
     }
@@ -81,6 +82,7 @@ public class KakaoOauthProvider implements OAuthProvider {
         formData.add("grant_type", request.getGrantType());
         formData.add("code", request.getCode());
         formData.add("client_id", request.getClientId());
+        formData.add("client_secret", request.getClientSecret());
         formData.add("redirect_uri", request.getRedirectUri());
         return formData;
     }

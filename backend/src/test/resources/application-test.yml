@@ -36,6 +36,7 @@ kakao:
   auth:
     token-uri: http://localhost:8080/kakao/oauth/token
     client-id: albaring-test-kakao-client-id
+    client-secret: albaring-test-kakao-client-secret
     redirect-uri: http://localhost:8080/api/auth/kakao/callback
 
   user:

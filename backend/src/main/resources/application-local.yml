@@ -39,6 +39,7 @@ kakao:
   auth:
     token-uri: https://kauth.kakao.com/oauth/token
     client-id: 07312ebdd7584a1895d57673e65fc17c
+    client-secret: u4F1QXxD0hqZeuNasn87k7X2NJdBOQBc
     redirect-uri: http://localhost:8080/api/auth/kakao/callback
 
   user:
