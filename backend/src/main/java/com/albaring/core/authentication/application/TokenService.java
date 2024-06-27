@@ -9,6 +9,7 @@ import com.albaring.core.member.application.MemberService;
 import com.albaring.core.member.domain.Member;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class TokenService {
     private final JwtTokenProvider jwtTokenProvider;
     private final OauthProviders oauthProviders;
 
+    @Transactional
     public MemberTokens generateToken(String providerName, OauthProviderCodeRequest request) {
         OAuthProvider oAuthProvider = oauthProviders.map(providerName);
         OauthUserProfile userProfile = oAuthProvider.getUserProfile(

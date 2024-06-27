@@ -1,4 +1,4 @@
-package com.albaring.core.authentication.application.dto;
+package com.albaring.core.authentication.application.kakao.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +14,8 @@ public class KakaoAccessTokenRequest {
     private String code;
 
     private String clientId;
+    
+    private String clientSecret;
 
     private String redirectUri;
 

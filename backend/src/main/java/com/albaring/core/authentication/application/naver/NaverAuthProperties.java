@@ -1,4 +1,4 @@
-package com.albaring.core.authentication.application.kakao;
+package com.albaring.core.authentication.application.naver;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties("kakao.auth")
-public class KakaoAuthProperties {
+@ConfigurationProperties("naver.auth")
+public class NaverAuthProperties {
 
     private String tokenUri;
     private String clientId;

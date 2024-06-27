@@ -34,13 +34,23 @@ security:
 
 kakao:
   auth:
-    token-uri: http://localhost:8080/oauth/token
+    token-uri: http://localhost:8080/kakao/oauth/token
     client-id: albaring-test-kakao-client-id
-    redirect-uri: http://localhost:8080/kakao/callback
+    client-secret: albaring-test-kakao-client-secret
+    redirect-uri: http://localhost:8080/api/auth/kakao/callback
 
   user:
-    profile-uri: http://localhost:8080/v2/user/me
+    profile-uri: http://localhost:8080/kakao/v2/user/me
 
+naver:
+  auth:
+    token-uri: http://localhost:8080/naver/oauth/token
+    client-id: albaring-test-naver-client-id
+    client-secret: albaring-test-naver-client-secret
+    redirect-uri: http://localhost:8080/api/auth/naver/callback
+
+  user:
+    profile-uri: http://localhost:8080/naver/v1/nid/me
 
 logging:
   level:
